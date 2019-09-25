@@ -1,0 +1,115 @@
+*{
+	margin: 0px;
+	padding: 0px;
+}
+
+body{
+	background-color: black;
+}
+
+.container{
+	display: flex;
+	font-size: 0px;
+}
+
+.row div{
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	vertical-align: bottom;
+}
+.brick{
+	background-color: blue;
+	display: inline-block;
+	vertical-align: bottom;
+}
+
+.coin{
+	display: inline-block;
+	background: url('coin.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+}
+
+.cherry{
+	display: inline-block;
+	background: url('cherry.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+}
+
+.strawberry{
+	display: inline-block;
+	background: url('strawberry.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+}
+
+#pacman{
+	background-size: cover;
+	width:20px;
+	height:20px;
+	position: absolute;
+	vertical-align: bottom;
+}
+
+#mrspacman{
+	background-size: cover;
+	width:20px;
+	height:20px;
+	position: absolute;
+	vertical-align: bottom;
+}
+
+#blinky{
+	background: url('blinky.png');
+	background-size: cover;
+	width:20px;
+	height:20px;
+	position: absolute;
+	vertical-align: bottom;
+}
+#pinky{
+	background: url('pinky.png');
+	background-size: cover;
+	width:20px;
+	height:20px;
+	position: absolute;
+	vertical-align: bottom;
+}
+#inky{
+	background: url('inky.png');
+	background-size: cover;
+	width:20px;
+	height:20px;
+	position: absolute;
+	vertical-align: bottom;
+}
+#clyde{
+	background: url('clyde.png');
+	background-size: cover;
+	width:20px;
+	height:20px;
+	position: absolute;
+	vertical-align: bottom;
+}
+
+.empty{
+	vertical-align: bottom;
+}
+
+#score{
+	border: 1px solid white;
+	width: 100px;
+	height: 30px;
+	color: white;
+	padding: 7px;
+	text-align: center;
+	line-height: 30px;
+	position: absolute;
+	top:0px;
+	left: 420px;
+}

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang = 'en'>
+<head>
+	<title>Pacman Demo</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="pacman.css">
+
+</head>
+<body>
+
+	<div id='container'>
+		<div id='world'></div>
+		<div id='pacman'></div>
+		<div id = 'mrspacman'></div>
+		<div id="score"></div>
+		<div id ='blinky'></div>
+		<div id ='pinky'></div>
+		<div id ='inky'></div>
+		<div id ='clyde'></div>
+	</div>
+
+	<script type="text/javascript">
+		var world = [
+		[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+		[2,0,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+		[2,1,2,1,2,1,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2],
+		[2,1,2,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2],
+		[2,1,2,1,2,1,2,1,2,1,2,2,2,1,2,2,2,1,2,1,2],
+		[2,1,2,1,2,1,2,1,2,1,2,0,1,3,1,0,2,1,2,1,2],
+		[2,1,1,1,2,1,1,1,1,1,1,4,2,2,2,4,1,1,1,1,2],
+		[2,1,2,1,2,1,2,1,2,1,2,0,1,3,1,0,2,1,2,1,2],
+		[2,1,2,1,2,1,2,1,2,1,2,2,2,1,2,2,2,1,2,1,2],
+		[2,1,2,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2],
+		[2,1,2,1,2,1,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2],
+		[2,0,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+		[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+	];
+
+	var score = 0;
+
+	var pacman = {
+		x: 1,
+		y: 1
+	};
+
+	var mrspacman = {
+		x:1,
+		y:11
+	};
+
+	var blinky = {
+		x: 11,
+		y: 7
+	};
+
+	var pinky = {
+		x: 11,
+		y: 5
+	};
+
+	var inky = {
+		x:15,
+		y:7
+	};
+
+	var clyde = {
+		x:15,
+		y:5
+	};
+
+
+	var Pdirection = 'Right'
+	var Mdirection = 'Right'
+
+	var life = true;
+
+		function displayWorld(){
+			var output = '';
+
+			for(var i = 0; i< world.length; i++){
+				output +="\n<div class='row'>\n";
+				for(var j = 0; j<world[i].length; j++){
+					if(world[i][j] == 2)
+						output +="<div class='brick'></div>";
+					if(world[i][j] == 1)
+						output +="<div class='coin'></div>";
+					if(world[i][j] == 0)
+						output +="<div class='blank'></div>";
+					if(world[i][j] == 3)
+						output +="<div class='cherry'></div>";
+					if(world[i][j] == 4)
+						output +="<div class='strawberry'></div>";
+				}
+				output +="\n</div>";
+			}
+			//console.log(output)
+			document.getElementById('world').innerHTML = output;	
+		}
+
+		function displayPacman(){
+			document.getElementById('pacman').style.backgroundImage = 'url("pacman'+Pdirection+'.png")'
+			document.getElementById('pacman').style.left = pacman.x*20+'px';
+			document.getElementById('pacman').style.top = pacman.y*20+'px';
+		}
+
+		function displayMrspacman(){
+			document.getElementById('mrspacman').style.backgroundImage = 'url("mrspacman'+Mdirection+'.jpg")'
+			document.getElementById('mrspacman').style.left = mrspacman.x*20+'px';
+			document.getElementById('mrspacman').style.top = mrspacman.y*20+'px';
+		}
+
+		function displayBlinky(){
+			document.getElementById('blinky').style.left = blinky.x*20+'px';
+			document.getElementById('blinky').style.top = blinky.y*20+'px';
+		}
+		function displayPinky(){
+			document.getElementById('pinky').style.left = pinky.x*20+'px';
+			document.getElementById('pinky').style.top = pinky.y*20+'px';
+		}
+		function displayInky(){
+			document.getElementById('inky').style.left = inky.x*20+'px';
+			document.getElementById('inky').style.top = inky.y*20+'px';
+		}
+		function displayClyde(){
+			document.getElementById('clyde').style.left = clyde.x*20+'px';
+			document.getElementById('clyde').style.top = clyde.y*20+'px';
+		}
+
+		function displayScore(){
+			document.getElementById('score').innerHTML = score;
+		}
+
+
+		//blinky movement
+		function moveBlinky(){
+			var blinkydirection = [
+			"left",
+			"right",
+			"up",
+			"down"
+			];
+
+			var random = blinkydirection[Math.floor(Math.random()*blinkydirection.length)];
+			if(random == 'left' && world[blinky.y][blinky.x-1] != 2){
+				blinky.x --;
+			}
+			if(random == 'right' && world[blinky.y][blinky.x+1] != 2){
+				blinky.x ++;
+			}
+			if(random == 'up' && world[blinky.y-1][blinky.x] != 2){
+				blinky.y --;
+			}
+			if(random == 'down' && world[blinky.y+1][blinky.x] != 2){
+				blinky.y ++;
+			}
+			
+		}
+
+		//pinky movement
+		function movePinky(){
+			var pinkydirection = [
+			"left",
+			"right",
+			"up",
+			"down"
+			];
+
+			var random1 = pinkydirection[Math.floor(Math.random()*pinkydirection.length)];
+			if(random1 == 'left' && world[pinky.y][pinky.x-1] != 2){
+				pinky.x --;
+			}
+			if(random1 == 'right' && world[pinky.y][pinky.x+1] != 2){
+				pinky.x ++;
+			}
+			if(random1 == 'up' && world[pinky.y-1][pinky.x] != 2){
+				pinky.y --;
+			}
+			if(random1 == 'down' && world[pinky.y+1][pinky.x] != 2){
+				pinky.y ++;
+			}
+			
+		}
+
+		//inky movement
+		function moveInky(){
+			var inkydirection = [
+			"left",
+			"right",
+			"up",
+			"down"
+			];
+
+			var random = inkydirection[Math.floor(Math.random()*inkydirection.length)];
+			if(random == 'left' && world[inky.y][inky.x-1] != 2){
+				inky.x --;
+			}
+			if(random == 'right' && world[inky.y][inky.x+1] != 2){
+				inky.x ++;
+			}
+			if(random == 'up' && world[inky.y-1][inky.x] != 2){
+				inky.y --;
+			}
+			if(random == 'down' && world[inky.y+1][inky.x] != 2){
+				inky.y ++;
+			}
+			
+		}
+
+		//clyde movement
+		function moveClyde(){
+			var clydedirection = [
+			"left",
+			"right",
+			"up",
+			"down"
+			];
+
+			var random = clydedirection[Math.floor(Math.random()*clydedirection.length)];
+			if(random == 'left' && world[clyde.y][clyde.x-1] != 2){
+				clyde.x --;
+			}
+			if(random == 'right' && world[clyde.y][clyde.x+1] != 2){
+				clyde.x ++;
+			}
+			if(random == 'up' && world[clyde.y-1][clyde.x] != 2){
+				clyde.y --;
+			}
+			if(random == 'down' && world[clyde.y+1][clyde.x] != 2){
+				clyde.y ++;
+			}
+			
+		}
+
+		//gameloop for movement
+		function gameLoop(){
+			if(life == true){
+				moveBlinky();
+				displayBlinky();
+				movePinky();
+				displayPinky();
+				moveInky();
+				displayInky();
+				moveClyde();
+				displayClyde();
+			}
+			setTimeout(gameLoop, 100);
+		}
+
+		//generate world
+
+		displayWorld();
+		displayPacman();
+		displayMrspacman();
+		displayScore();
+		displayBlinky();
+		displayPinky();
+		displayInky();
+		displayClyde();
+
+
+		document.onkeydown = function(e){
+				//pacman movement
+				if(life == true){
+					if(e.keyCode == 37){
+						if(world[pacman.y][pacman.x-1] != 2){
+							pacman.x --;
+						}
+						Pdirection = 'Left';
+
+					}
+					else if(e.keyCode == 39){
+						if(world[pacman.y][pacman.x+1] != 2){
+							pacman.x ++;
+						}
+						Pdirection = 'Right';
+					}
+					else if(e.keyCode == 38){
+						if(world[pacman.y-1][pacman.x] != 2){
+							pacman.y --;
+						}
+						Pdirection = 'Up';
+					}
+					else if(e.keyCode == 40){
+						if(world[pacman.y+1][pacman.x] != 2){
+							pacman.y ++;
+						}
+						Pdirection = 'Down';
+					}
+
+					//pacman points
+					if(world[pacman.y][pacman.x] == 1){
+						world[pacman.y][pacman.x] = 0;
+						score+= 10;
+						displayWorld();
+						displayScore();
+					}
+					if(world[pacman.y][pacman.x] == 3){
+						world[pacman.y][pacman.x] = 0;
+						score+= 50;
+						displayWorld();
+						displayScore();
+					}
+					if(world[pacman.y][pacman.x] == 4){
+						world[pacman.y][pacman.x] = 0;
+						score+= 100;
+						displayWorld();
+						displayScore();
+					}
+
+					//pacman death
+					if(pacman.y === blinky.y && pacman.x === blinky.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+						console.log('blinky');
+					}
+					else if(pacman.y === pinky.y && pacman.x === pinky.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+						console.log('pinky');
+					}
+					else if(pacman.y === inky.y && pacman.x === inky.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+						console.log('inky');
+					}
+					else if(pacman.y === clyde.y && pacman.x === clyde.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+						console.log('clyde');
+					}
+					if(score == 'Game Over'){
+						console.log(pacman.y, pacman.x);
+						console.log(mrspacman.y, mrspacman.x);
+						console.log(blinky.y, blinky.x);
+						console.log(pinky.y, pinky.x);
+						console.log(inky.y, inky.x);
+						console.log(clyde.y, clyde.x);
+					}
+					
+					//mrs pacman movement
+
+					if(e.keyCode == 65){
+						if(world[mrspacman.y][mrspacman.x-1] != 2){
+							mrspacman.x --;
+						}
+						Mdirection = 'Left';
+
+					}
+					else if(e.keyCode == 68){
+						if(world[mrspacman.y][mrspacman.x+1] != 2){
+							mrspacman.x ++;
+						}
+						Mdirection = 'Right';
+					}
+					else if(e.keyCode == 87){
+						if(world[mrspacman.y-1][mrspacman.x] != 2){
+							mrspacman.y --;
+						}
+						Mdirection = 'Up';
+					}
+					else if(e.keyCode == 83){
+						if(world[mrspacman.y+1][mrspacman.x] != 2){
+							mrspacman.y ++;
+						}
+						Mdirection = 'Down';
+					}
+
+					//mrs pacman points
+					if(world[mrspacman.y][mrspacman.x] == 1){
+						world[mrspacman.y][mrspacman.x] = 0;
+						score+= 10;
+						displayWorld();
+						displayScore();
+					}
+					if(world[mrspacman.y][mrspacman.x] == 3){
+						world[mrspacman.y][mrspacman.x] = 0;
+						score+= 50;
+						displayWorld();
+						displayScore();
+					}
+					if(world[mrspacman.y][mrspacman.x] == 4){
+						world[mrspacman.y][mrspacman.x] = 0;
+						score+= 100;
+						displayWorld();
+						displayScore();
+					}
+
+					//mrs pacman death
+					if(mrspacman.y == blinky.y && mrspacman.x == blinky.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+					}
+					else if(mrspacman.y == pinky.y && mrspacman.x == pinky.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+					}
+					else if(mrspacman.y == inky.y && mrspacman.x == inky.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+					}
+					else if(mrspacman.y == clyde.y && mrspacman.x == clyde.x){
+						score = 'Game Over';
+						displayScore();
+						life = false;
+					}
+					displayPacman();
+					displayMrspacman();
+					//console.log(e.keyCode)
+				}
+			}
+				
+		gameLoop();
+
+	</script>
+
+
+
+</body>
+</html>
+
+
